@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARNOR GYM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #333;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: block;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #667eea;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #764ba2;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .auth-switch p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .auth-switch a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .auth-switch a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .form-group.slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                max-height: 100px;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group.slide-out {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                max-height: 100px;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                max-height: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            white-space: pre-line;
+        }
+
+        #googleFormFrame {
+            width: 0;
+            height: 0;
+            border: none;
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #333;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .header::after {
+            content: '';
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: block;
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        .welcome-msg {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .menu-card {
+            background: #fff;
+            border: 3px solid #e1e5e9;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .menu-card:hover::before {
+            left: 100%;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #667eea;
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.2);
+        }
+
+        .menu-card h2 {
+            font-size: 2.5rem;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-card .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .menu-card:hover .icon {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .chest-card { border-left: 5px solid #e74c3c; }
+        .back-card { border-left: 5px solid #3498db; }
+        .legs-card { border-left: 5px solid #2ecc71; }
+
+        .record-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            margin-top: 20px;
+        }
+
+        .record-card h2 {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .description {
+            color: #666;
+            font-size: 1rem;
+            margin-top: 15px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+
+        .record-card .description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .workout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .exercise-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .exercise-list li {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-list li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .workout-timer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .timer-display h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.5rem;
+        }
+
+        .time-display {
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .timer-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .timer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .start-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .pause-btn {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .pause-btn:hover:not(:disabled) {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .stop-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .stop-btn:hover:not(:disabled) {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .workout-status {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .exercise-list-container h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .exercise-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-name {
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+
+        .exercise-check {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+
+        .check-label {
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .records-container {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .records-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .records-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .record-item {
+            background: #fff;
+            border: 1px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .record-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .record-type {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .record-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .record-details {
+            display: flex;
+            justify-content: space-between;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .no-records {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .timer-btn {
+                width: 200px;
+                margin: 5px 0;
+            }
+            
+            .time-display {
+                font-size: 2.5rem;
+            }
+            
+            .records-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <div class="logo">
+            <h1>ARNOR GYM</h1>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">使用者帳號:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">使用者密碼:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                <label for="confirmPassword">確認密碼:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword">
+            </div>
+            
+            <div class="form-group" id="emailGroup" style="display: none;">
+                <label for="email">電子信箱:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            
+            <button type="submit" class="login-btn" id="submitBtn">登入</button>
+        </form>
+        
+        <div class="auth-switch">
+            <p id="switchText">還沒有帳號？ <a href="#" onclick="toggleAuthMode()">立即註冊</a></p>
+        </div>
+        
+        <div class="forgot-password">
+            <a href="#" onclick="handleForgotPassword()">忘記密碼？</a>
+        </div>
+    </div>
+
+    <!-- 隱藏的Google Forms iframe -->
+    <iframe name="googleFormFrame" id="googleFormFrame"></iframe>
+
+    <!-- 訓練選單 (隱藏) -->
+    <div id="trainingMenu" style="display: none;">
+        <button class="back-btn" onclick="logout()">← 登出</button>
+        
+        <div class="container">
+            <div class="header">
+                <h1>ARNOR GYM</h1>
+                <div class="welcome-msg" id="welcomeMsg">歡迎回來！</div>
+            </div>
+            
+            <div class="menu-grid">
+                <div class="menu-card chest-card" onclick="openWorkout('chest')">
+                    <span class="icon">💪</span>
+                    <h2>練胸</h2>
+                    <p class="description">胸肌訓練計畫<br>打造完美胸型</p>
+                </div>
+                
+                <div class="menu-card back-card" onclick="openWorkout('back')">
+                    <span class="icon">🏋️</span>
+                    <h2>練背</h2>
+                    <p class="description">背部肌群強化<br>改善體態線條</p>
+                </div>
+                
+                <div class="menu-card legs-card" onclick="openWorkout('legs')">
+                    <span class="icon">🦵</span>
+                    <h2>練腿</h2>
+                    <p class="description">下肢力量訓練<br>提升整體爆發力</p>
+                </div>
+                
+                <div class="menu-card record-card" onclick="openWorkout('record')">
+                    <span class="icon">📊</span>
+                    <h2>運動紀錄</h2>
+                    <p class="description">追蹤訓練進度 • 記錄健身成果 • 分析運動數據</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 訓練詳情模態框 -->
+        <div class="workout-modal" id="workoutModal">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <h2 id="modalTitle">訓練計畫</h2>
+                <div id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 預設的使用者帳號資料和註冊用戶儲存
+        const defaultUsers = {
+            'admin': 'password123',
+            'user1': '123456',
+            'guest': 'guest123',
+            'arnor': 'gym2024'
+        };
+
+        // 從 localStorage 載入已註冊用戶
+        function loadUsers() {
+            const savedUsers = localStorage.getItem('registeredUsers');
+            const registeredUsers = savedUsers ? JSON.parse(savedUsers) : {};
+            return { ...defaultUsers, ...registeredUsers };
+        }
+
+        // 儲存新註冊用戶
+        function saveUser(username, password, email) {
+            const savedUsers = localStorage.getItem('registeredUsers');
+            const registeredUsers = savedUsers ? JSON.parse(savedUsers) : {};
+            
+            registeredUsers[username] = password;
+            
+            // 同時儲存用戶詳細資訊
+            const userDetails = localStorage.getItem('userDetails');
+            const details = userDetails ? JSON.parse(userDetails) : {};
+            details[username] = {
+                email: email,
+                registerTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            localStorage.setItem('userDetails', JSON.stringify(details));
+        }
+
+        // 提交到Google Forms
+        function submitToGoogleForms(username, password, email) {
+            // 創建隱藏的form元素提交到Google Forms
+            const form = document.createElement('form');
+            form.action = 'https://docs.google.com/forms/d/e/1FAIpQLSfzu0laNBBy8WzCdGZ8MFBULofTbHVaoZ9KrpxHI_VoK00AKA/formResponse';
+            form.method = 'POST';
+            form.target = 'googleFormFrame';
+            form.style.display = 'none';
+
+            // 帳號欄位
+            const usernameField = document.createElement('input');
+            usernameField.name = 'entry.818892214';
+            usernameField.value = username;
+            form.appendChild(usernameField);
+
+            // 密碼欄位（注意：實際應用中不應該明文傳送密碼）
+            const passwordField = document.createElement('input');
+            passwordField.name = 'entry.58691902';
+            passwordField.value = password;
+            form.appendChild(passwordField);
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+
+        let isRegisterMode = false;
+
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+            const emailGroup = document.getElementById('emailGroup');
+            const submitBtn = document.getElementById('submitBtn');
+            const switchText = document.getElementById('switchText');
+            const forgotPassword = document.querySelector('.forgot-password');
+
+            if (isRegisterMode) {
+                // 切換到註冊模式
+                confirmPasswordGroup.style.display = 'block';
+                emailGroup.style.display = 'block';
+                confirmPasswordGroup.classList.add('slide-in');
+                emailGroup.classList.add('slide-in');
+                
+                submitBtn.textContent = '註冊';
+                submitBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                switchText.innerHTML = '已有帳號？ <a href="#" onclick="toggleAuthMode()">立即登入</a>';
+                forgotPassword.style.display = 'none';
+                
+                document.getElementById('confirmPassword').required = true;
+                document.getElementById('email').required = true;
+                
+            } else {
+                // 切換到登入模式
+                confirmPasswordGroup.classList.add('slide-out');
+                emailGroup.classList.add('slide-out');
+                
+                setTimeout(() => {
+                    confirmPasswordGroup.style.display = 'none';
+                    emailGroup.style.display = 'none';
+                    confirmPasswordGroup.classList.remove('slide-in', 'slide-out');
+                    emailGroup.classList.remove('slide-in', 'slide-out');
+                }, 300);
+                
+                submitBtn.textContent = '登入';
+                submitBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                switchText.innerHTML = '還沒有帳號？ <a href="#" onclick="toggleAuthMode()">立即註冊</a>';
+                forgotPassword.style.display = 'block';
+                
+                document.getElementById('confirmPassword').required = false;
+                document.getElementById('email').required = false;
+            }
+            
+            // 清空所有輸入框
+            document.getElementById('loginForm').reset();
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('submitBtn');
+            
+            if (!username || !password) {
+                showMessage('請輸入完整資訊！', 'error');
+                return;
+            }
+
+            if (isRegisterMode) {
+                handleRegister(username, password, btn);
+            } else {
+                handleLogin(username, password, btn);
+            }
+        });
+
+        function handleRegister(username, password, btn) {
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const email = document.getElementById('email').value.trim();
+            
+            // 驗證註冊資料
+            if (password !== confirmPassword) {
+                showMessage('密碼確認不一致！', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('密碼長度至少需要6個字元！', 'error');
+                return;
+            }
+            
+            if (!email || !validateEmail(email)) {
+                showMessage('請輸入有效的電子信箱！', 'error');
+                return;
+            }
+            
+            const users = loadUsers();
+            if (users[username]) {
+                showMessage('此帳號已存在！請選擇其他帳號名稱', 'error');
+                return;
+            }
+            
+            // 開始註冊流程
+            btn.style.background = 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)';
+            btn.textContent = '註冊中...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                // 儲存新用戶到本地
+                saveUser(username, password, email);
+                
+                // 提交到Google Forms
+                submitToGoogleForms(username, password, email);
+                
+                btn.style.background = 'linear-gradient(135deg, #28a745 0%, #2d6a4f 100%)';
+                btn.textContent = '註冊成功！';
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.textContent = '註冊';
+                    btn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                    showMessage('註冊成功！請使用新帳號登入。', 'success');
+                    
+                    // 自動切換到登入模式
+                    setTimeout(() => {
+                        toggleAuthMode();
+                    }, 2000);
+                }, 1000);
+            }, 2000);
+        }
+
+        function handleLogin(username, password, btn) {
+            const users = loadUsers();
+            
+            if (!users[username] || users[username] !== password) {
+                showMessage('帳號或密碼錯誤！', 'error');
+                return;
+            }
+            
+            // 開始登入流程
+            btn.style.background = 'linear-gradient(135deg, #f39c12 0%, #e67e22 100%)';
+            btn.textContent = '登入中...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.style.background = 'linear-gradient(135deg, #28a745 0%, #2d6a4f 100%)';
+                btn.textContent = '登入成功！';
+                
+                // 儲存當前登入用戶
+                localStorage.setItem('currentUser', username);
+                
+                setTimeout(() => {
+                    showTrainingMenu(username);
+                }, 1000);
+            }, 1500);
+        }
+
+        function showMessage(text, type) {
+            // 移除舊的訊息
+            const oldMessage = document.querySelector('.message');
+            if (oldMessage) {
+                oldMessage.remove();
+            }
+            
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            
+            document.getElementById('loginContainer').appendChild(message);
+            
+            // 3秒後自動移除訊息
+            setTimeout(() => {
+                if (message && message.parentNode) {
+                    message.remove();
+                }
+            }, 3000);
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function showTrainingMenu(username) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('trainingMenu').style.display = 'block';
+            document.getElementById('welcomeMsg').textContent = `歡迎回來，${username}！`;
+            document.body.style.alignItems = 'flex-start';
+            document.body.style.padding = '0';
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('trainingMenu').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.body.style.alignItems = 'center';
+            document.body.style.padding = '20px';
+            document.getElementById('loginForm').reset();
+            
+            // 重置按鈕狀態
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = false;
+            btn.textContent = '登入';
+            btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        }
+
+        function handleForgotPassword() {
+            showMessage('請聯絡管理員重設密碼\n或使用以下測試帳號：\nadmin / password123\nguest / guest123', 'info');
+        }
+
+        // 運動相關功能
+        const workoutData = {
+            chest: {
+                title: '胸部訓練',
+                exercises: [
+                    '平板臥推 - 4組 x 8-12次',
+                    '上斜臥推 - 3組 x 10-15次',
+                    '啞鈴飛鳥 - 3組 x 12-15次',
+                    '雙槓撐體 - 3組 x 至力竭',
+                    '胸部拉力器 - 3組 x 15-20次'
+                ]
+            },
+            back: {
+                title: '背部訓練',
+                exercises: [
+                    '引體向上 - 4組 x 至力竭',
+                    '划船機 - 4組 x 12-15次',
+                    '拉力器下拉 - 3組 x 10-12次',
+                    '單臂啞鈴划船 - 3組 x 12次',
+                    '硬舉 - 4組 x 8-10次'
+                ]
+            },
+            legs: {
+                title: '腿部訓練',
+                exercises: [
+                    '深蹲 - 4組 x 12-15次',
+                    '腿部推蹬 - 4組 x 15-20次',
+                    '腿部彎曲 - 3組 x 12-15次',
+                    '腿部伸直 - 3組 x 15-20次',
+                    '小腿提踵 - 4組 x 20-25次'
+                ]
+            }
+        };
+
+        let currentTimer = null;
+        let timerInterval = null;
+        let startTime = 0;
+        let elapsedTime = 0;
+        let isRunning = false;
+
+        function openWorkout(type) {
+            const modal = document.getElementById('workoutModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            if (type === 'record') {
+                modalTitle.textContent = '運動紀錄';
+                modalContent.innerHTML = generateRecordsHTML();
+            } else {
+                const workout = workoutData[type];
+                modalTitle.textContent = workout.title;
+                modalContent.innerHTML = generateWorkoutHTML(workout, type);
+                initializeTimer();
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function generateWorkoutHTML(workout, type) {
+            return `
+                <div class="workout-timer">
+                    <div class="timer-display">
+                        <h3>訓練計時器</h3>
+                        <div class="time-display" id="timeDisplay">00:00:00</div>
+                        <div class="workout-status" id="workoutStatus">準備開始訓練</div>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="timer-btn start-btn" id="startBtn" onclick="startTimer()">開始</button>
+                        <button class="timer-btn pause-btn" id="pauseBtn" onclick="pauseTimer()" disabled>暫停</button>
+                        <button class="timer-btn stop-btn" id="stopBtn" onclick="stopTimer()" disabled>結束</button>
+                    </div>
+                </div>
+                
+                <div class="exercise-list-container">
+                    <h4>${workout.title}項目：</h4>
+                    <ul class="exercise-list">
+                        ${workout.exercises.map((exercise, index) => `
+                            <li>
+                                <span class="exercise-name">${exercise}</span>
+                                <label class="check-label">
+                                    <input type="checkbox" class="exercise-check" data-exercise="${index}">
+                                    完成
+                                </label>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        function generateRecordsHTML() {
+            const records = getWorkoutRecords();
+            const stats = calculateStats(records);
+            
+            return `
+                <div class="records-container">
+                    <div class="records-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">${stats.totalWorkouts}</span>
+                            <span class="stat-label">總訓練次數</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">${stats.totalTime}</span>
+                            <span class="stat-label">總訓練時間</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">${stats.avgTime}</span>
+                            <span class="stat-label">平均時長</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">${stats.thisWeek}</span>
+                            <span class="stat-label">本週訓練</span>
+                        </div>
+                    </div>
+                    
+                    <div class="records-list">
+                        ${records.length > 0 ? records.map(record => `
+                            <div class="record-item">
+                                <div class="record-header">
+                                    <span class="record-type">${getWorkoutTypeName(record.type)}</span>
+                                    <span class="record-date">${formatDate(record.date)}</span>
+                                </div>
+                                <div class="record-details">
+                                    <span>訓練時長: ${formatTime(record.duration)}</span>
+                                    <span>完成項目: ${record.completedExercises}/${record.totalExercises}</span>
+                                </div>
+                            </div>
+                        `).join('') : '<div class="no-records">暫無訓練記錄</div>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeTimer() {
+            currentTimer = null;
+            elapsedTime = 0;
+            isRunning = false;
+            updateTimeDisplay();
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                startTime = Date.now() - elapsedTime;
+                timerInterval = setInterval(updateTimer, 100);
+                isRunning = true;
+                
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('pauseBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = false;
+                document.getElementById('workoutStatus').textContent = '訓練中...';
+            }
+        }
+
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(timerInterval);
+                isRunning = false;
+                
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('startBtn').textContent = '繼續';
+                document.getElementById('pauseBtn').disabled = true;
+                document.getElementById('workoutStatus').textContent = '已暫停';
+            }
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // 儲存訓練記錄
+            const completedExercises = document.querySelectorAll('.exercise-check:checked').length;
+            const totalExercises = document.querySelectorAll('.exercise-check').length;
+            const workoutType = getCurrentWorkoutType();
+            
+            saveWorkoutRecord({
+                type: workoutType,
+                duration: elapsedTime,
+                completedExercises: completedExercises,
+                totalExercises: totalExercises,
+                date: new Date().toISOString()
+            });
+            
+            // 重置狀態
+            elapsedTime = 0;
+            isRunning = false;
+            updateTimeDisplay();
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('startBtn').textContent = '開始';
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('workoutStatus').textContent = '訓練完成！';
+            
+            showMessage(`訓練完成！\n時長: ${formatTime(elapsedTime)}\n完成項目: ${completedExercises}/${totalExercises}`, 'success');
+        }
+
+        function updateTimer() {
+            elapsedTime = Date.now() - startTime;
+            updateTimeDisplay();
+        }
+
+        function updateTimeDisplay() {
+            document.getElementById('timeDisplay').textContent = formatTime(elapsedTime);
+        }
+
+        function formatTime(milliseconds) {
+            const totalSeconds = Math.floor(milliseconds / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function getCurrentWorkoutType() {
+            const title = document.getElementById('modalTitle').textContent;
+            if (title.includes('胸部')) return 'chest';
+            if (title.includes('背部')) return 'back';
+            if (title.includes('腿部')) return 'legs';
+            return 'unknown';
+        }
+
+        function getWorkoutTypeName(type) {
+            const names = {
+                chest: '胸部訓練',
+                back: '背部訓練',
+                legs: '腿部訓練'
+            };
+            return names[type] || '未知訓練';
+        }
+
+        function saveWorkoutRecord(record) {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) return;
+            
+            const key = `workoutRecords_${currentUser}`;
+            const records = JSON.parse(localStorage.getItem(key) || '[]');
+            records.unshift(record);
+            
+            // 只保留最近50條記錄
+            if (records.length > 50) {
+                records.splice(50);
+            }
+            
+            localStorage.setItem(key, JSON.stringify(records));
+        }
+
+        function getWorkoutRecords() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) return [];
+            
+            const key = `workoutRecords_${currentUser}`;
+            return JSON.parse(localStorage.getItem(key) || '[]');
+        }
+
+        function calculateStats(records) {
+            const totalWorkouts = records.length;
+            const totalTime = records.reduce((sum, record) => sum + record.duration, 0);
+            const avgTime = totalWorkouts > 0 ? Math.floor(totalTime / totalWorkouts) : 0;
+            
+            // 計算本週訓練次數
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            const thisWeek = records.filter(record => new Date(record.date) > oneWeekAgo).length;
+            
+            return {
+                totalWorkouts,
+                totalTime: formatTime(totalTime),
+                avgTime: formatTime(avgTime),
+                thisWeek
+            };
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getMonth() + 1}/${date.getDate()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('workoutModal');
+            modal.style.display = 'none';
+            
+            // 清理計時器
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            initializeTimer();
+        }
+
+        // 檢查是否已登入
+        window.addEventListener('load', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                showTrainingMenu(currentUser);
+            }
+        });
+
+        // 點擊模態框外部關閉
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('workoutModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
